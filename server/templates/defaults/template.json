@@ -1,0 +1,11 @@
+{
+    "templateSettings": {},
+    "instanceFieldsMould": [],
+    "templateConstants": [
+        {
+            "name": "transitionms",
+            "type": "number",
+            "value": "250"
+        }
+    ]
+}

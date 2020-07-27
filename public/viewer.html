@@ -1,0 +1,54 @@
+<html>
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="css/viewer.css">
+
+    <title>Feature Slip Viewer</title>
+
+      <script src="thirdparty/jquery-3.3.1.min.js"></script>
+      <script src="thirdparty/handlebars-v4.0.11.js"></script>
+      <script src="thirdparty/sass/sass.js"></script>
+      <script src="commonClient.js"></script>
+      <script src="viewer.js"></script>
+      <script src="utilities/utilities.js"></script>
+      <script src="utilities/fieldEditors/base.js"></script>
+      <script src="utilities/fieldEditors/string.js"></script>
+      <script src="utilities/fieldEditors/number.js"></script>
+      <script src="utilities/fieldEditors/color.js"></script>
+      <script src="utilities/fieldEditors/boolean.js"></script>
+      <script src="utilities/fieldEditors/image.js"></script>
+      <script src="utilities/fieldEditors/select.js"></script>
+  
+      <script src="extras/shapeShifter.js"></script>
+
+</head>
+
+<body id="viewer">
+
+  <svg>
+    <filter id="svgRemoveAlphaFilter">
+      <feColorMatrix values="1  0  0  0  0    0  1  0  0  0    0  0  1  0  0    0  0  0  0  1"></feColorMatrix>
+    </filter>
+  </svg>
+  
+  <svg>
+    <filter id="svgExtractAlphaFilter">
+      <feColorMatrix values="0  0  0  1  0    0  0  0  1  0    0  0  0  1  0    0  0  0  0  1"></feColorMatrix>
+
+      <feColorMatrix values="-1 0 0 0 1    0 -1 0 0 1    0 0 -1 0 1    0 0 0 1 0"></feColorMatrix>
+    </filter>
+  </svg>
+
+    <div class="preLoad">Test</div>
+
+    <div class="viewer-window">
+        <div class="debug-border"><div class="outer"></div><div class="inner"></div></div>
+        <div class="views">
+        </div>
+    </div>
+
+</body>
+
+</html>

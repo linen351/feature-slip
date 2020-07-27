@@ -1,0 +1,497 @@
+
+body {
+    background-color: #FFF;
+}
+
+thead {
+    font-weight: bold;
+}
+
+#body-wrapper {
+    height:100vh;
+    padding: 1rem;
+}
+
+.tab-menu-wrapper {
+    >* {
+        float: left;
+        vertical-align: top;
+        height: 100%;
+
+        &:nth-child(1) {
+            padding-right: 1rem;
+        }
+
+        &:nth-child(n+2) {
+            width: calc(100% - 11rem);
+            padding-left: 1rem;
+        }
+        
+    }
+
+    >.vertical-tab-menu-wrapper {
+        width: 11rem;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        >.ui.vertical.menu {
+            width: 10rem;
+            height: 100%;
+        }
+    }
+
+    .tab-menu-wrapper {
+        padding-left: 0;
+    }
+    
+}
+
+.user-editor-show,
+.user-runner-show,
+.user-viewadmin-show,
+.user-admin-show {
+    visibility: hidden;
+}
+
+body.user-is-editor .user-editor-show,
+body.user-is-runner .user-runner-show,
+body.user-is-viewadmin .user-viewadmin-show,
+body.user-is-admin .user-admin-show,
+body.user-is-admin .user-editor-show,
+body.user-is-admin .user-runner-show,
+body.user-is-admin .user-viewadmin-show {
+    visibility: visible;
+}
+
+.ui.table td.positive, 
+.ui.table tr.positive {
+    background: #99ff99!important;
+}
+
+
+#playerControl>.segment,
+#osc>.segment,
+#viewsEditor>.segment,
+#playlistsEditor>.segment {
+    height: calc(100% - 4.5rem);    
+}
+
+#helpView {
+    overflow: auto;
+}
+
+#osc .scrollable {
+    height: calc(100% - 2em);
+    overflow: auto;
+}
+
+#playerControl>.bottom.attached.menu,
+#osc>.bottom.attached.menu {
+    height: 4.5rem;
+}
+
+
+#playerControl .contentTarget {
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#viewsEditor .contentTarget {
+    height: calc(100% - 2em);
+    overflow: auto;
+}
+
+#instancesEditor .contentTarget {
+    height: calc(100% + 1em);
+    overflow: auto;
+}
+
+#playerControl .template {
+    display: inline-block;
+    width: 20rem;
+    margin-left: 1px;
+    margin-right: 1rem;
+
+    >div.top {
+        height: calc(100% - 9em);
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+
+        >table {
+            width: calc(100% + 2px);
+            margin: -1px;
+
+            td:nth-of-type(2) {
+                width: 9em;
+            }
+            
+        }
+        
+    }
+    
+}
+
+
+#templatesAndInstances>.segment {
+    height: calc(100% - 7.5rem);
+}
+
+#instancesEditor > .bottom.attached.menu,
+#templatesEditor  > .bottom.attached.menu {    
+    position: absolute;
+    top: 100%;
+    left: 0;
+    height: 4.5rem;
+}
+
+#playlistsEditor {
+    display: none;
+
+    .scrollable {
+        height: calc(100% - 2em);
+        overflow: auto;
+    }
+
+    .deactivate,
+    &.active-playlist .activate,
+    .nav {
+        display: none;
+    }
+
+    &.active-playlist {
+        .deactivate {
+            display: block;
+        }
+        .nav {
+            display: flex;
+        }
+    }
+    
+}
+
+#viewsEditor {
+    display: none;
+}
+
+#templatesAndInstances {
+    display: none;
+}
+
+.tabular.menu .ui.header {
+    margin: 0.3rem 1.4rem 0 0;
+}
+
+#templatesEditor {
+
+    >.contentTarget {
+        >* {
+            float: left;
+            width: calc(25% - 2em);
+            padding: 0;
+            margin-left: 0.5em;
+            margin-right: 1.5em;
+
+            &:first-of-type {
+                margin-left: 1em;
+            }
+
+            &:last-of-type {
+                margin-right: 0;
+            }
+            
+        }
+    }
+
+    .settings .segment-content {
+        overflow-y: auto;
+        overflow-x: hidden;
+        height: 100%;
+    }
+
+    
+    .segment {
+        &.editor {
+            position: relative;
+            height: calc(100% - 2em);
+            margin-top: 1em;
+            margin-bottom: 1em;
+
+            &.half {
+                height: calc(50% - 2em);
+                padding: 0;
+
+                &:last-of-type {
+                    margin-top: 2em;
+                }
+            
+            }
+
+            >.label {
+                z-index: 10;
+            }
+
+            >.ribbon {
+                position: absolute;
+                left: -1.2em;
+                top: -1em;
+                padding-left: 1em;
+            }
+
+            >.content {
+                width: 100%;
+                height: 100%;
+            }
+
+            .contract {
+                display: none;
+            }
+
+            
+        }
+        
+    }
+    
+    .settings {
+
+        table {
+            table-layout: fixed;
+            margin: -1px -1px 1em;
+            width: calc(100% + 3px);
+
+            tr {
+                td {
+                    width: 50%;
+
+                    >* {
+                        width: 100%;
+                    }
+
+                    &.type,
+                    &.buttons {
+                        display: none;
+                    }
+                }
+            }
+            
+        }
+
+        .segment {
+            &.editor {
+                >.content {
+                    overflow: auto;
+                }
+
+                &.selected-editor {
+                    td {
+                        .type,
+                        .buttons {
+                            display: table-cell;
+                        }
+                    }
+
+                    .button {
+                        .add {
+                            display: block;
+                            margin: 1em 0 0;
+                        }
+                    }
+                    
+                }
+
+            }
+        }
+
+        button {
+            &.settings {
+                display: none;
+            }
+        }
+
+        .button {
+            &.add {
+                display: none;
+            }
+        }
+        
+    }
+
+    &.single-editor {
+
+        .settings {
+            table {
+                tr {
+                    td {
+                        width: 25%;
+
+                        >* {
+                            width: 100%;
+                        }
+
+                        &.type,
+                        &.buttons {
+                            display: table-cell;
+                        }    
+                        
+                    }
+                }
+            }
+
+            button {
+                &.settings {
+                    display: block;
+                }
+            }
+    
+            .button {
+                &.add {
+                    display: block;
+                }
+            }
+    
+        }
+
+        .segment {
+            &.editor {
+
+                display: none;
+
+                .expand  {
+                    display: none;
+                }
+                .contract{
+                    display: block;
+                }
+
+                &.selected-editor {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    margin: 0;
+                    border: none;
+                }
+
+                >.ribbon {
+                    top: -0.4em;
+                }
+
+                >.segment-content {
+                    padding: 1rem;
+                }
+                
+                
+            }
+        }
+
+        >.content {
+            >* {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        
+    }
+    
+}
+
+.field-select {
+    display: flex;
+    .ui.selection.dropdown {
+        width: 100%;
+        min-width: 50px;
+    }
+}
+
+.select-settings-selector {
+    textarea {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+.field-image {
+
+    width: 180px;
+
+    .visible.content {
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+    } 
+    .hidden {
+        &.content {
+            background-size: cover;
+            background-position: 50% 50%;
+            height: 100% !important;
+            top: 0 !important;
+            margin-top: 0 !important;
+        }   
+    } 
+}
+
+
+.field-boolean {
+    margin-top: 0.6em !important;
+}
+
+.image-selector {
+
+    .content {
+
+        max-height: calc(100% - 200px);
+        overflow: auto;
+
+        $size: 70px;
+
+        .item {
+
+            position: relative;
+            display: flex;
+
+            cursor: pointer;
+
+            height: $size;
+            margin-bottom: 10px;
+
+
+            .preview {
+                position: relative;
+                z-index: 1;
+
+                width: $size;
+                height: $size;    
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: 50% 50%;
+                margin-right: 20px;
+
+            }
+
+            &::after {
+
+                content: "";
+
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: $size;
+                height: $size;    
+                z-index: 0;
+
+                background-image: /* tint image */
+                linear-gradient(to right, rgba(192, 192, 192, 0.75), rgba(192, 192, 192, 0.75)),
+                /* checkered effect */
+                linear-gradient(to right, black 50%, white 50%),
+                linear-gradient(to bottom, black 50%, white 50%);
+                background-blend-mode: normal, difference, normal;
+                background-size: 14px 14px;
+            }
+        }
+
+    }
+
+}

@@ -1,0 +1,657 @@
+<html>
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="thirdparty/semantic/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+    <title>Feature Slip Editor</title>
+
+</head>
+
+<body>
+
+    <script class="handlebars-list-template" type="text/x-handlebars-template">
+
+        {{#each all}}
+
+        <a class="item {{#if selected}} active {{/if}} " data-name="{{name}}">{{name}}</a>
+
+        {{/each}}
+
+        {{#if allowAdd}}
+
+        <a class="item">
+            
+            <div class="ui button primary fluid add">Add</div>
+
+        </a>
+
+        {{/if}}
+
+    </script>
+
+
+    <script class="handlebars-items-template" type="text/x-handlebars-template">
+
+        <table class="ui definition table">
+
+            <tbody>
+
+                {{#each this}}
+
+                    <tr class="row_{{this.id}} selectItem {{#if active}} positive {{/if}} " {{#if editable}} draggable="true" {{/if}} data-id="{{this.id}}" data-templatename="{{this.templateName}}" data-instancename="{{this.instanceName}}" data-viewname="{{this.viewName}}">
+
+                        <td>{{name}}</td>
+
+                        <td>
+
+                            <div class="ui icon buttons user-runner-show">
+
+                                <a class="ui button startIn">
+                                    <i class="play icon"></i>
+                                </a>
+                                <a class="ui button startRefresh">
+                                    <i class="redo refresh icon"></i>
+                                </a>
+                                <a class="ui button startOut">
+                                    <i class="stop icon"></i>
+                                </a>
+
+                            </div>
+
+                            {{#if editable}}
+                            
+                                <div class="ui icon buttons user-editor-show">
+
+                                    <a class="ui button deleteItem">
+                                        <i class="trash icon"></i>
+                                    </a>
+
+                                </div>
+                            
+                            {{/if}} 
+                            
+
+                        </td>
+
+                    </tr>
+
+                {{/each}}
+
+            </tbody>
+
+        </table>
+
+    </script>
+
+
+    <script class="handlebars-instance-player-template" type="text/x-handlebars-template">
+
+        <div class="template">
+
+            <h3>{{this.templateName}}</h3>
+
+            <div class="ui attached top segment">
+
+                {{> items this.items}}
+
+            </div>
+
+            <div class="ui bottom attached menu">
+
+                <div class="item user-runner-show">
+                    <div class="ui icon button startOut" data-templatename="{{this.templateName}}" ><i class="stop icon"></i></div>
+                </div>
+
+            </div>    
+
+        </div>
+
+    </script>
+
+    <div id="body-wrapper" class="tab-menu-wrapper">
+
+        <div id="mainMenu" class="vertical-tab-menu-wrapper">
+            <div class="ui vertical tabular menu">
+                <a class="item active" data-tab="playlist">
+                    Playlist
+                </a>
+                <a class="item" data-tab="playerControl">
+                    Player Control
+                </a>
+                <!-- <a class="item" data-tab="osc">
+                    OSC
+                </a> -->
+                <a class="item" data-tab="templates">
+                    Templates
+                </a>
+                <a class="item" data-tab="viewers">
+                    Viewers
+                </a>
+                <a class="item" data-tab="help">
+                    Help
+                </a>
+            </div>
+        </div>
+
+        <div class="ui tab tab-menu-wrapper active" data-tab="playlist">
+
+            <div class="vertical-tab-menu-wrapper">
+                <div id="playlistsList" class="ui vertical tabular menu"></div>
+            </div>
+
+            <div id="playlistsEditor">
+
+                <div class="ui attached segment">
+
+                    <h2 class="ui header">
+                        Playlist
+                        <span class="playlist-name"></span>
+                    </h2>
+
+                    <div class="scrollable">
+
+                        <p>
+                            <div class="contentTarget"></div>
+                        </p>
+
+                        <p>
+                            <div class="ui item-select search selection dropdown user-editor-show">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Add instance</div>
+                                <div class="menu">
+                                </div>
+                            </div>
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="ui bottom attached menu">
+
+                    <div class="item user-runner-show">
+
+                        <div class="ui icon button clearAll">
+                            <i class="stop icon"></i>
+                        </div>
+
+                    </div>
+
+                    <div class="item nav user-runner-show">
+
+                        <div class="ui buttons">
+
+                            <div class="ui icon button navPrev">
+                                <i class="fast backward icon"></i>
+                            </div>
+
+                            <div class="ui icon button navRefresh">
+                                <i class="refresh icon"></i>
+                            </div>
+
+                            <div class="ui icon button navNext">
+                                <i class="fast forward icon"></i>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="ui item user-runner-show">
+
+                        <div class="ui viewer-select search selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Select viewer</div>
+                            <div class="menu">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="item activate user-runner-show">
+
+                        <div class="ui buttons">
+
+                            <div class="ui button primary">Activate</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="item deactivate user-runner-show">
+
+                        <div class="ui buttons">
+                            <div class="ui button">Deactivate</div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="item">
+
+                        <div class="ui buttons">
+
+                            <div class="ui button primary save user-editor-show user-runner-show">Save</div>
+
+                            <div class="ui button rename user-editor-show">Rename</div>
+
+                            <div class="ui button delete user-editor-show">Delete</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div id="playerControl" class="ui tab" data-tab="playerControl">
+
+            <div class="ui attached segment">
+
+                <h2 class="ui header">
+                    Player Control
+                </h2>
+
+                <div class="contentTarget"></div>
+
+            </div>
+
+            <div class="ui bottom attached menu">
+
+                <div class="item user-runner-show">
+                    <div class="ui icon button stopAll">
+                        <i class="stop icon"></i>
+                    </div>
+                </div>
+
+                <div class="ui item user-runner-show">
+
+                    <div class="ui viewer-select search selection dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Select viewer</div>
+                        <div class="menu">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- <div id="osc" class="ui tab" data-tab="osc">
+
+            <div class="ui attached segment">
+
+                <h2 class="ui header">
+                    OSC Control
+                </h2>
+
+                <div class="scrollable">
+
+                    <div class="contentTarget"></div>
+
+                    <div class="ui segment">
+
+                        <p>Feature Slip is controlled by commands encoded into the name of things in Resolume.</p>
+
+                        <p>Example: /fs/v/view1/t/template1/i/instance1/startin</p>
+
+                        <p>
+                            <ul>
+                                <li>fs = All commands must start like this</li>
+                                <li>v = view name</li>
+                                <li>t = template name</li>
+                                <li>i = instance name</li>
+                                <li>startin = start in</li>
+                                <li>startout = start out</li>
+                            </ul>
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="ui bottom attached menu">
+                <a class="item">
+                    <div class="ui button save">Save</div>
+                </a>
+            </div>
+
+        </div> -->
+        <div class="ui tab tab-menu-wrapper" data-tab="viewers">
+
+            <div class="vertical-tab-menu-wrapper">
+                <div id="viewsList" class="ui vertical tabular menu"></div>
+            </div>
+
+            <div id="viewsEditor">
+
+                <div class="ui attached segment">
+
+                    <h2 class="ui header">
+                        Viewer
+                        <span class="view-name"></span>
+                    </h2>
+
+                    <div class="contentTarget user-viewadmin-show"></div>
+
+                </div>
+
+                <div class="ui bottom attached menu">
+
+                    <div class="item">
+                        <div class="ui button primary open">Open</div>
+                    </div>
+
+                    <div class="item user-viewadmin-show">
+
+                        <div class="ui buttons">
+
+                            <div class="ui button primary save">Save</div>
+
+                            <div class="ui button rename">Rename</div>
+
+                            <!-- <div class="ui button delete">Delete</div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="ui tab tab-menu-wrapper" data-tab="help">
+
+            <div id="helpView">
+                <h3 class="header">Modes</h3>
+                <table>
+                    <tr>
+                        <td><a href="/watcher">Watcher</a></td>
+                        <td>Can watch everything. Can open viewers. Can not change anything.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="/editor">Editor</a></td>
+                        <td>Can edit instances of templates and playlists. Can not modify templates.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="/runner">Runner</a></td>
+                        <td>Runs the show. Can start instances showing, can edit playlists. Can do all play, stop etc.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="/viewadmin">ViewAdmin</a></td>
+                        <td>Can change the viewers.</td>
+                    </tr>
+                    <tr>
+                        <td><a href="/admin">Admin</a></td>
+                        <td>Can do all of the above and can also modify templates.</td>
+                    </tr>
+                </table>
+
+                <h3 class="header">Template-settings</h3>
+                <table>
+                    <tr><td>singleOnStage</td><td>When you start an instance of this anything which is already on the stage will be cleared.</td></tr>
+                    <tr><td>singleTemplateOnStage</td><td>When you start an instance of this any instance of this already running will be cleared.</td></tr>
+                    <tr><td>noOverlap</td><td>Will clear what needs to be cleared before starting in on what you started.</td></tr>
+                </table>
+
+            </div>
+        </div>
+
+
+        <div class="ui tab tab-menu-wrapper" data-tab="templates">
+
+            <div class="vertical-tab-menu-wrapper">
+                <div id="templatesList" class="ui vertical tabular menu"></div>
+            </div>
+
+            <div id="templatesAndInstances">
+
+                <div class="ui top attached tabular menu">
+
+                    <h2 class="ui header">
+                        Template
+                        <span class="template-name"></span>
+                    </h2>
+                    <a class="active item" data-tab="template-instances">
+                        Instances
+                    </a>
+                    <a class="item user-admin-show" data-tab="template-editor">
+                        Edit
+                    </a>
+                </div>
+
+                <div id="instancesEditor" class="ui tab active attached segment" data-tab="template-instances">
+
+                    <div class="contentTarget"></div>
+
+                    <div class="ui bottom attached menu">
+
+                        <div class="item user-runner-show">
+
+                            <div class="ui icon button startOut">
+                                <i class="stop icon"></i>
+                            </div>
+
+                        </div>
+
+                        <div class="ui item user-runner-show">
+
+                            <div class="ui viewer-select search selection dropdown">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select viewer</div>
+                                <div class="menu">
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="item user-editor-show">
+
+                            <div class="ui button add">Add</div>
+
+                        </div>
+                        <div class="item user-editor-show">
+
+                            <div class="ui button primary save">Save</div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="templatesEditor" class="ui tab attached segment user-admin-show" data-tab="template-editor">
+
+                    <div class="contentTarget">
+
+                        <div class="settings">
+
+                            <div class="ui segment editor half">
+
+                                <a class="ui blue ribbon label">Constants</a>
+
+                                <a class="expand ui right corner label">
+                                    <i class="expand icon"></i>
+                                </a>
+                                <a class="contract ui right corner label">
+                                    <i class="compress icon"></i>
+                                </a>
+
+                                <div class="segment-content">
+
+                                    <div class="templateSettings">
+
+                                        <div class="content"></div>
+
+                                    </div>
+
+                                    <div class="templateConstants">
+
+                                        <div class="content"></div>
+                                        <div class="ui button primary add">Add</div>
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+                            <div class="ui segment editor half">
+
+                                <a class="ui blue ribbon label">Instance Mould</a>
+
+                                <a class="expand ui right corner label">
+                                    <i class="expand icon"></i>
+                                </a>
+                                <a class="contract ui right corner label">
+                                    <i class="compress icon"></i>
+                                </a>
+
+                                <div class="segment-content">
+
+                                    <div class="instanceFieldsMould">
+
+                                        <div class="content"></div>
+                                        <div class="ui button primary add">Add</div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="ui segment html editor">
+
+                            <a class="ui blue ribbon label">HTML</a>
+
+                            <a class="expand ui right corner label">
+                                <i class="expand icon"></i>
+                            </a>
+                            <a class="contract ui right corner label">
+                                <i class="compress icon"></i>
+                            </a>
+
+                            <div class="content"></div>
+
+                        </div>
+                        <div class="ui segment css editor">
+
+                            <a class="ui blue ribbon label">SCSS</a>
+
+                            <a class="expand ui right corner label">
+                                <i class="expand icon"></i>
+                            </a>
+                            <a class="contract ui right corner label">
+                                <i class="compress icon"></i>
+                            </a>
+
+                            <div class="content"></div>
+
+                        </div>
+                        <div class="ui segment code editor">
+
+                            <a class="ui blue ribbon label">JS</a>
+
+                            <a class="expand ui right corner label">
+                                <i class="expand icon"></i>
+                            </a>
+                            <a class="contract ui right corner label">
+                                <i class="compress icon"></i>
+                            </a>
+
+                            <div class="content"></div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="ui bottom attached menu">
+
+                        <div class="ui item user-editor-show">
+
+                            <div class="ui buttons">
+
+                                <div class="ui button primary save">Save</div>
+
+                                <div class="ui button rename">Rename</div>
+
+                                <!-- <div class="ui button delete">Delete</div> -->
+
+                            </div>
+
+                        </div>
+
+                        <div class="ui item user-editor-show">
+
+                            <div class="ui field-select search selection dropdown">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select field</div>
+                                <div class="menu">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+    </div>
+
+
+    <script src="thirdparty/jquery-3.3.1.min.js"></script>
+    <script src="thirdparty/handlebars-v4.0.11.js"></script>
+    <script src="thirdparty/src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="thirdparty/jscolor.js"></script>
+    <script src="thirdparty/semantic/semantic.min.js"></script>
+    <script src="utilities/utilities.js"></script>
+    <script src="utilities/fieldEditors/base.js"></script>
+    <script src="utilities/fieldEditors/string.js"></script>
+    <script src="utilities/fieldEditors/number.js"></script>
+    <script src="utilities/fieldEditors/color.js"></script>
+    <script src="utilities/fieldEditors/boolean.js"></script>
+    <script src="utilities/fieldEditors/image.js"></script>
+    <script src="utilities/fieldEditors/select.js"></script>
+    <script src="commonClient.js"></script>
+    <script src="commonEditorClient.js"></script>
+    <script src="systemSettings/mainMenuClient.js"></script>
+    <script src="viewer/viewsListClient.js"></script>
+    <script src="viewer/viewsEditorClient.js"></script>
+    <script src="templates/templatesListClient.js"></script>
+    <script src="templates/templatesEditorClient.js"></script>
+    <script src="instances/instancesListClient.js"></script>
+    <script src="instances/instancesEditorClient.js"></script>
+    <script src="player/playerControlClient.js"></script>
+    <script src="player/playlistsListClient.js"></script>
+    <script src="player/playlistsEditorClient.js"></script>
+    <!-- <script src="osc/oscClient.js"></script> -->
+    <script src="editor.js"></script>
+
+</body>
+
+</html>

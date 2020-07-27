@@ -1,0 +1,125 @@
+/*
+Sass-driven https://sass-lang.com/
+
+Template variable: $template-X
+View variable: $view-Z
+System variable: $system-Q
+*/
+
+z-index: 10;
+
+
+$delayAnimSplit: 0.65;
+
+$delay: $template-transitionms * $delayAnimSplit;
+$anim: $template-transitionms * (1 - $delayAnimSplit);
+
+
+$delayAnimSplit2: 0.75;
+
+$delay2: $template-transitionms * $delayAnimSplit2;
+$anim2: $template-transitionms * (1 - $delayAnimSplit2);
+
+
+
+.imageContainer {
+
+    opacity: 0;
+
+    transition: opacity #{$anim}ms, left #{$anim}ms ease, top #{$anim}ms ease;
+
+    position: absolute;
+    left: -40%;
+    top: -90%;
+    width: 35%;
+    height: 90%;
+
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: contain; 
+    
+    background-image: url('#{$template-bild-path}');
+    
+    
+}
+
+.förnamn,
+.efternamn,
+.förlaga,
+.karaktär {
+    position: absolute;
+    left: 120%;
+    font-size: 0.4em;
+    color: white;
+
+    transition: opacity #{$anim2}ms, left #{$anim}ms ease, top #{$anim}ms ease;
+    transition-delay: #{$delay2}ms;
+    
+    font-family: GothamMedium;
+
+}
+
+.förnamn {
+    top: 75%;
+}
+.efternamn {
+    top: 75%;
+}
+.karaktär {
+    top: 75%;
+}
+.förlaga {
+    top: 75%;
+}
+
+
+&.in {
+    .imageContainer {
+        left: 5%;
+        top: 5%;
+        opacity: 1;
+    }
+    .förnamn,
+    .efternamn,
+    .karaktär,
+    .förlaga {
+        left: 46%;
+    }
+
+    .förnamn,
+    .karaktär {
+        font-size: 0.6em;
+    }
+    .förnamn {
+        top: 20%;
+    }
+    .efternamn {
+        top: 35%;
+    }
+    .karaktär {
+        top: 55%;
+    }
+    .förlaga {
+        top: 70%;
+    }
+    
+}
+
+&.prepForOut {
+/*
+    .efternamn,
+    .förlaga,
+    .imageContainer {
+        transition-delay: 0ms;
+    }
+    */
+}
+
+&.out {
+    .imageContainer {
+        left: 10% !important;
+        top: 105% !important;
+        opacity: 0 !important;
+    }
+}
+

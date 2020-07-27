@@ -1,0 +1,166 @@
+@font-face {
+    font-family: NarconFont;
+    src: url("NarCon-Regular.otf") format("opentype");
+}
+@font-face {
+    font-family: GothamBold;
+    src: url("GothamBold.ttf") format("truetype");
+}
+@font-face {
+    font-family: GothamMedium;
+    src: url("GothamMedium.ttf") format("truetype");
+}
+  
+
+
+body {
+    overflow: hidden;
+    font-size: 10rem;
+}
+
+.preLoad {
+    font-family: NarconFont;
+    position: fixed;
+    left: -1000px;
+    top: -1000px;
+    width: 10px;
+    height: 10px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.debug-border {
+    display: none;
+}
+
+body.show-borders .debug-border {
+    display: block;
+    position: absolute;
+    z-index: 10000000000;
+    width: inherit;
+    height: inherit;
+
+    >* {
+        border: 1px solid;
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        width: 100%;
+        height: 100%;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: -1px;
+            top: -1px;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed;
+        }
+        
+    }
+
+    >.outer {
+        margin-left: -1px;
+        margin-top: -1px;
+        width: calc(100% + 2px);
+        height: calc(100% + 2px);
+        border-color: red;
+
+        &::after {
+            border-color: green;    
+        }
+    }
+
+    >.inner {
+        border-color: blue;    
+
+        &::after {
+            border-color: yellow;    
+        }
+    }
+    
+}
+
+.viewer-window {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
+
+    >.views {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: flex;
+
+        >.view {
+            position: relative;
+            overflow: hidden;
+
+            flex-shrink: 0;
+            box-sizing: content-box;    
+
+            >.view__hole {
+
+                position: absolute; 
+                overflow: hidden;
+
+                >.view__stage {
+                    position: absolute; 
+
+                    >.instance {
+                        position: absolute;
+                        display: none;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        flex-direction: row;
+                        transform: translateZ(0); /* Solves transition bug in chrome */
+
+                        margin: 0;
+                        padding: 0;
+
+                        * {
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        &.instance_shared {
+                            display: block;
+                        }
+                    }
+                }
+            }
+
+            &.mask {
+                >.view__hole {
+                    filter: url(#svgExtractAlphaFilter)
+                }
+            }
+
+            &.masked {
+                >.view__hole {
+                    filter: url(#svgRemoveAlphaFilter);                        
+                }
+            }
+
+        }
+        
+    }
+    
+}
+
+body.stack-vertical .viewer-window {
+    >.views{
+        flex-direction: column;
+    }
+}
+
+
+
+
+

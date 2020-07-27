@@ -1,0 +1,45 @@
+/*
+    Sass-driven https://sass-lang.com/
+
+    Template variable: $template-X
+    View variable: $view-Z
+    System variable: $system-Q
+*/
+
+z-index: 10;
+
+transition: opacity #{$template-transitionms}ms;
+opacity: 0;
+
+.text,
+.subtext {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    padding: 0 10%;
+    color: white;
+    text-align: center;
+}
+
+.text {
+    font-family: NarconFont;
+    font-size: #{$template-fontScale/100 + em};
+    top: #{$template-top};   
+}
+
+.subText {
+    font-family: GothamMedium;
+    font-size: #{$template-fontScale/220 + em};
+    top: #{$template-subTextTop};
+    line-height: 120%;
+}
+
+
+
+&.startIn {
+    opacity: 1;
+}
+
+&.startOut {
+    opacity: 0;
+}

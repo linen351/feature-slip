@@ -1,0 +1,15 @@
+* Snabbtangenter för playlist
+* "Bara visa"-läge
+* Auto-scroll i playlist
+* Enklare snabbare bygga om playlist
+
+
+* Bättre markering av vart "spel"-huvudet är i spellistan
+
+
+* När man aktiverar byter även andra klienter vad som är valt
+
+
+* Bra om man kan previewa det man själv gör
+
+

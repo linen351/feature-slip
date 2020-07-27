@@ -1,0 +1,125 @@
+{
+	"viewFieldsMould": [
+		{
+			"name": "chroma",
+			"type": "color",
+			"value": "#000000"
+		},
+		{
+			"name": "scale",
+			"type": "number",
+			"value": 100
+		},
+		{
+			"name": "viewerWidth",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "viewerHeight",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "stageWidth",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "stageHeight",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "offsetX",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "offsetY",
+			"type": "number",
+			"value": 0
+		},
+		{
+			"name": "showBorders",
+			"type": "boolean",
+			"value": false
+		},
+		{
+			"name": "graceMargin",
+			"type": "number",
+			"value": 10
+		},
+		{
+			"name": "showMask",
+			"type": "boolean",
+			"value": false
+		},
+		{
+			"name": "showMasked",
+			"type": "boolean",
+			"value": false
+		},
+		{
+			"name": "verticalWhenBothMaskAndMasked",
+			"type": "boolean",
+			"value": false
+		}
+	],
+	"templateFieldsMould": [
+		{
+			"name": "active",
+			"type": "boolean",
+			"value": true
+		},
+		{
+			"name": "singleOnStage",
+			"type": "boolean",
+			"value": false
+		},
+		{
+			"name": "singleTemplateOnStage",
+			"type": "boolean",
+			"value": false
+		},
+		{
+			"name": "noOverlap",
+			"type": "boolean",
+			"value": false
+		}
+	],
+	"oscFieldsMould": [
+		{
+			"name": "active",
+			"type": "boolean",
+			"value": true
+		},
+		{
+			"name": "address",
+			"type": "string",
+			"value": "127.0.0.1"
+		},
+		{
+			"name": "incomingPort",
+			"type": "number",
+			"value": 7001
+		},
+		{
+			"name": "outgoingPort",
+			"type": "number",
+			"value": 7000
+		}
+	],
+	"constants": [
+		{
+			"name": "a",
+			"type": "number",
+			"value": 1
+		},
+		{
+			"name": "b",
+			"type": "number",
+			"value": 2
+		}
+	]
+}

@@ -1,0 +1,35 @@
+/*
+    Sass-driven https://sass-lang.com/
+
+    Template variable: $template-X
+    View variable: $view-Z
+    System variable: $system-Q
+*/
+
+transition: opacity #{$template-transitionms}ms;
+
+z-index: 40;
+
+.image {
+
+    position: absolute;
+
+    transition: all #{$template-transitionms}ms;
+    
+    transform: scale($template-scale);
+    left: #{$template-outXpercent + %};
+    top: #{$template-outYpercent + %};
+    
+}
+
+&.startIn {
+
+    .image {
+        left: #{$template-inXpercent + %};
+        top: #{$template-inYpercent + %};
+    }
+    
+}
+
+&.startOut {
+}

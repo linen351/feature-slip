@@ -1,0 +1,1 @@
+{"templateSettings":{"active":true,"singleOnStage":false,"singleTemplateOnStage":true,"noOverlap":true},"instanceFieldsMould":[{"name":"background","type":"string","value":"#000"}],"templateConstants":[{"name":"transitionms","type":"number","value":2000}]}
