@@ -3,7 +3,7 @@ let http = require('http');
 let url = require('url');
 let fs = require('fs');
 //let compileSass = require('./../public/thirdparty/sass/sass.sync');
-let compileSass = require('./../public/thirdparty/sass/sass.node');
+let compileSass = require('../public/thirdparty/sass/sass.node');
 
 const port = 1337;
 
