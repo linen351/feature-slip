@@ -1,15 +1,17 @@
-const rootPath = '../public/data/playlists';
-
-const playlistSettingsFileName = "playlist.json";
-
-let getPlaylistsFolderPath = exports.getPlaylistsFolderPath = function() {
+"use strict";
+exports.__esModule = true;
+exports.getPlaylistSettingsFilePath = exports.getPlaylistPath = exports.getPlaylistsFolderPath = void 0;
+var rootPath = "../public/data/playlists";
+var playlistSettingsFileName = "playlist.json";
+var getPlaylistsFolderPath = function () {
     return rootPath;
-}
-
-let getPlaylistPath = exports.getPlaylistPath = function (playlistName) {
-    return getPlaylistsFolderPath() + "/" + playlistName;
-}
-
-exports.getPlaylistSettingsFilePath = function (playlistName) {
-    return getPlaylistPath(playlistName) + "/" + playlistSettingsFileName;
-}
+};
+exports.getPlaylistsFolderPath = getPlaylistsFolderPath;
+var getPlaylistPath = function (playlistName) {
+    return (0, exports.getPlaylistsFolderPath)() + "/" + playlistName;
+};
+exports.getPlaylistPath = getPlaylistPath;
+var getPlaylistSettingsFilePath = function (playlistName) {
+    return (0, exports.getPlaylistPath)(playlistName) + "/" + playlistSettingsFileName;
+};
+exports.getPlaylistSettingsFilePath = getPlaylistSettingsFilePath;

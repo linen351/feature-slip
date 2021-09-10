@@ -1,173 +1,116 @@
-let common = require('../commonServer.js');
-let systemSettingsCommon = require('../systemSettings/systemSettingsCommon.js');
-let templatesCommon = require('./templatesCommon.js');
-let viewerServer = require('../viewer/viewerServer.js');
-let templatesList = require('../templates/templatesListServer.js');
-let instanceEditor = require('../instances/instancesEditorServer.js');
-let playerControl = require('../player/playerControlServer.js');
-let playlistsListServer = require('../player/playlistsListServer.js');
-let utilities = require('../../public/utilities/utilities.js');
-
-let fs = require('fs');
-let that = this;
-
+"use strict";
+exports.__esModule = true;
+exports.init = exports.actions = exports.loadTemplate = exports.key = void 0;
+var common = require("../commonServer");
+var systemSettingsCommon = require("../systemSettings/systemSettingsCommon");
+var templatesCommon = require("./templatesCommon");
+var viewerServer = require("../viewer/viewerServer");
+var templatesList = require("./templatesListServer");
+var instanceEditor = require("../instances/instancesEditorServer");
+var playerControl = require("../player/playerControlServer");
+var playlistsListServer = require("../player/playlistsListServer");
+var utilities = require("../../public/utilities/utilities");
+var fs = require("fs");
+var that = this;
 exports.key = "templatesEditor";
-
-let loadTemplate = exports.loadTemplate = function (templateName, what) {
-
+var loadTemplate = function (templateName, what) {
     if (what) {
-
-        let isSettings = templatesCommon.filesForTemplate.settings == what;
-
-        let filePath = templatesCommon.getConfigurationFilePath(templateName, what);
-
+        var isSettings = templatesCommon.filesForTemplate.settings == what;
+        var filePath = templatesCommon.getConfigurationFilePath(templateName, what);
         if (!fs.existsSync(filePath)) {
-
             filePath = templatesCommon.getConfigurationDefaultFilePath(what);
-
         }
-
-        let result = fs.readFileSync(filePath, common.fileEncoding);
-
-        if (isSettings) {
-
-            result = JSON.parse(result);
-
-            let systemSettings = systemSettingsCommon.getSystemSettings();
-
-            let templateFieldsMould = systemSettings.templateFieldsMould;
-
-            result.templateSettings = common.applyFieldDefaults(result.templateSettings || {}, templateFieldsMould)
-
+        var result = fs.readFileSync(filePath, common.fileEncoding);
+        if (!isSettings) {
+            return result;
         }
-
-
-        return result;
-
-    } else {
-
-        let result = {
-                templateName: templateName
-            },
-            filesForTemplate = templatesCommon.filesForTemplate;
-
-        for (let what in filesForTemplate) {
-
-            result[what] = loadTemplate(templateName, filesForTemplate[what]);
-
-        }
-
-        let systemSettings = systemSettingsCommon.getSystemSettings();
-
-        result.viewFieldsMould = systemSettings.viewFieldsMould;
-        result.systemSettings = systemSettings.constants;
-
-        return result;
-
+        var jsonResult = JSON.parse(result);
+        var systemSettings = systemSettingsCommon.getSystemSettings();
+        var templateFieldsMould = systemSettings.templateFieldsMould;
+        jsonResult.templateSettings = common.applyFieldDefaults(jsonResult.templateSettings || {}, templateFieldsMould);
+        return jsonResult;
     }
-
-}
-
-let actions = exports.actions = {
-
+    else {
+        var result = {
+            templateName: templateName
+        }, filesForTemplate = templatesCommon.filesForTemplate;
+        for (var what_1 in filesForTemplate) {
+            result[what_1] = (0, exports.loadTemplate)(templateName, filesForTemplate[what_1]);
+        }
+        var systemSettings = systemSettingsCommon.getSystemSettings();
+        result["viewFieldsMould"] = systemSettings.viewFieldsMould;
+        result["systemSettings"] = systemSettings.constants;
+        return result;
+    }
+};
+exports.loadTemplate = loadTemplate;
+exports.actions = {
     load: function (inData) {
-
-        let templateName = inData.templateName;
-
-        common.sendToAllClients.call(that, "loaded", loadTemplate(templateName));
-
+        var templateName = inData.templateName;
+        common.sendToAllClients.call(that, "loaded", (0, exports.loadTemplate)(templateName));
         if (inData.includeAllInstances) {
             instanceEditor.actions.load({ templateName: templateName });
         }
     },
-
     save: function (inData) {
-
-        let data = inData.data;
-        let what = inData.what;
-        let templateName = inData.templateName;
-        let templateConfigurationPath = templatesCommon.getConfigurationFolderPath(templateName);
-        let filePath = templatesCommon.getConfigurationFilePath(templateName, templatesCommon.filesForTemplate[what]);
-
+        var data = inData.data;
+        var what = inData.what;
+        var templateName = inData.templateName;
+        var templateConfigurationPath = templatesCommon.getConfigurationFolderPath(templateName);
+        var filePath = templatesCommon.getConfigurationFilePath(templateName, templatesCommon.filesForTemplate[what]);
         if (!fs.existsSync(templateConfigurationPath)) {
             fs.mkdirSync(templateConfigurationPath);
         }
-
-        if (templatesCommon.filesForTemplate[what] == templatesCommon.filesForTemplate.settings) {
-
-            data.templateSettings = utilities.fieldList.toDict(data.templateSettings);
-
+        if (templatesCommon.filesForTemplate[what] ==
+            templatesCommon.filesForTemplate.settings) {
+            data.templateSettings = utilities.toDict(data.templateSettings);
             data = JSON.stringify(data);
-
         }
-
         fs.writeFileSync(filePath, data, common.fileEncoding);
-
-        actions.load({ templateName: templateName, includeAllInstances: true });
-        viewerServer.actions.loadTemplateForAllViews({ templateName: templateName });
+        exports.actions.load({ templateName: templateName, includeAllInstances: true });
+        viewerServer.actions.loadTemplateForAllViews({
+            templateName: templateName
+        });
         playerControl.actions.loadAll();
-
     },
-
     rename: function (inData) {
-
-        let oldTemplateName = inData.oldTemplateName;
-        let newTemplateName = inData.newTemplateName;
-
+        var oldTemplateName = inData.oldTemplateName;
+        var newTemplateName = inData.newTemplateName;
         if (!newTemplateName) {
             if (newTemplateName == "") {
                 common.sendToAllClients.call(that, "warning", "Must give name");
-            } return;
+            }
+            return;
         }
-
-        let oldPath = templatesCommon.getTemplatePath(oldTemplateName),
-            newPath = templatesCommon.getTemplatePath(newTemplateName);
-
+        var oldPath = templatesCommon.getTemplatePath(oldTemplateName), newPath = templatesCommon.getTemplatePath(newTemplateName);
         if (fs.existsSync(newPath)) {
             common.sendToAllClients.call(that, "warning", "Already exists");
             return;
         }
-
         playlistsListServer.renameContents({
             template: {
                 oldName: oldTemplateName,
                 newName: newTemplateName
             }
         });
-
         fs.renameSync(oldPath, newPath);
-
         playlistsListServer.actions.loadAll();
         templatesList.actions.getAll();
-        actions.load({ templateName: newTemplateName, includeAllInstances: true });
-        viewerServer.actions.loadTemplateForAllViews({ templateName: newTemplateName });
-
+        exports.actions.load({ templateName: newTemplateName, includeAllInstances: true });
+        viewerServer.actions.loadTemplateForAllViews({
+            templateName: newTemplateName
+        });
     },
-
-    delete: function (inData) {
-
-        let path = templatesCommon.getTemplatePath(inData.templateName);
-
+    "delete": function (inData) {
+        var path = templatesCommon.getTemplatePath(inData.templateName);
         if (fs.existsSync(path)) {
-
-            fs.readdirSync(path).forEach(file => {
-    
-                fs.unlinkSync(path + "\\" + file)
-    
+            fs.readdirSync(path).forEach(function (file) {
+                fs.unlinkSync(path + "\\" + file);
             });
-    
             fs.rmdirSync(path);
-    
         }
-    
-        templatesList.actions.getAll()
-
+        templatesList.actions.getAll();
     }
-
 };
-
-exports.init = function () {
-
-
-
-}
+var init = function () { };
+exports.init = init;

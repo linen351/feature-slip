@@ -1,56 +1,37 @@
-let common = require('../commonServer.js');
-let viewsCommon = require('../viewer/viewsCommon.js');
-
-let fs = require('fs');
-let that = this;
-
+"use strict";
+exports.__esModule = true;
+exports.init = exports.actions = exports.getAll = exports.key = void 0;
+var common = require("../commonServer");
+var viewsCommon = require("../viewer/viewsCommon");
+var fs = require("fs");
+var that = this;
 exports.key = "viewsList";
-
-let getAll = exports.getAll = function () {
-
+var getAll = function () {
     return fs.readdirSync(viewsCommon.getViewsFolderPath());
-
 };
-
-
-let actions = exports.actions = {
-
-    getAll: function (inData) {
-
-        common.sendToAllClients.call(that, "all", getAll());
-
+exports.getAll = getAll;
+exports.actions = {
+    getAll: function () {
+        common.sendToAllClients.call(that, "all", (0, exports.getAll)());
     },
-
     add: function (inData) {
-
-        let viewName = inData.viewName;
-
+        var viewName = inData.viewName;
         if (!viewName) {
             common.sendToAllClients.call(that, "warning", "Must have name");
             return;
         }
-
-        let folderPath = viewsCommon.getViewsFolderPath();
-
+        var folderPath = viewsCommon.getViewsFolderPath();
         if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath);
         }
-
-        let path = viewsCommon.getViewPath(viewName);
-
+        var path = viewsCommon.getViewPath(viewName);
         if (fs.existsSync(path)) {
             common.sendToAllClients.call(that, "warning", "Already exists");
             return;
         }
-
         fs.mkdirSync(path);
-
-        actions.getAll()
-
+        exports.actions.getAll();
     }
-
 };
-
-exports.init = function () {
-
-};
+var init = function () { };
+exports.init = init;

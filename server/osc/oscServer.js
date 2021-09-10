@@ -1,11 +1,11 @@
-//let osc = require("osc");
-let common = require('../commonServer.js');
-let systemSettingsCommon = require('../systemSettings/systemSettingsCommon.js');
-let viewer = require('../viewer/viewerServer.js');
-let playerControl = require('../player/playerControlServer.js');
-let utilities = require('../../public/utilities/utilities.js');
+//import * as osc from "osc";
+import * as common from '../commonServer';
+import * as systemSettingsCommon from '../systemSettings/systemSettingsCommon';
+import * as viewer from '../viewer/viewerServer';
+import * as playerControl from '../player/playerControlServer';
+import * as utilities from '../../public/utilities/utilities';
 
-let fs = require('fs');
+import * as fs from 'fs';
 let that = this;
 
 

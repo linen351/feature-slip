@@ -1,124 +1,77 @@
-let common = require('../commonServer.js');
-let viewsCommon = require('../viewer/viewsCommon.js');
-let systemSettingsCommon = require('../systemSettings/systemSettingsCommon.js');
-let viewsList = require('./viewsListServer.js');
-let viewer = require('../viewer/viewerServer.js');
-
-let fs = require('fs');
-let that = this;
-
+"use strict";
+exports.__esModule = true;
+exports.init = exports.actions = exports.del = exports.rename = exports.loadView = exports.key = void 0;
+var common = require("../commonServer");
+var viewsCommon = require("../viewer/viewsCommon.js");
+var systemSettingsCommon = require("../systemSettings/systemSettingsCommon.js");
+var viewsList = require("./viewsListServer.js");
+var viewer = require("../viewer/viewerServer.js");
+var fs = require("fs");
+var that = this;
 exports.key = "viewsEditor";
-
 function getViewFieldsMould() {
-
-    let systemSettings = systemSettingsCommon.getSystemSettings();
+    var systemSettings = systemSettingsCommon.getSystemSettings();
     return systemSettings.viewFieldsMould;
-
 }
-
-let loadView = exports.loadView = function (viewName, viewFieldsMould) {
-
-    viewFieldsMould = viewFieldsMould || getViewFieldsMould(viewName);
-
-    let filePath = viewsCommon.getViewSettingsFilePath(viewName);
-
-    let raw = fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath, common.fileEncoding)) : {};
-
+var loadView = function (viewName, viewFieldsMould) {
+    viewFieldsMould = viewFieldsMould || getViewFieldsMould();
+    var filePath = viewsCommon.getViewSettingsFilePath(viewName);
+    var raw = fs.existsSync(filePath)
+        ? JSON.parse(fs.readFileSync(filePath, common.fileEncoding))
+        : {};
     return common.applyFieldDefaults(raw, viewFieldsMould);
-
 };
-
-
-let rename = exports.rename = function (inData) {
-
-    let newViewName = inData.newViewName;
-
+exports.loadView = loadView;
+var rename = function (inData) {
+    var newViewName = inData.newViewName;
     if (!newViewName) {
         if (newViewName == "") {
             common.sendToAllClients.call(that, "warning", "Must give name");
         }
         return;
     }
-
-    let oldPath = viewsCommon.getViewPath(inData.oldViewName),
-        newPath = viewsCommon.getViewPath(newViewName);
-
+    var oldPath = viewsCommon.getViewPath(inData.oldViewName), newPath = viewsCommon.getViewPath(newViewName);
     if (fs.existsSync(newPath)) {
         common.sendToAllClients.call(that, "warning", "Already exists");
         return;
     }
-
     fs.renameSync(oldPath, newPath);
-
-}
-
-let del = exports.delete = function (inData) {
-
-    let path = viewsCommon.getViewPath(inData.viewName);
-
+};
+exports.rename = rename;
+var del = function (inData) {
+    var path = viewsCommon.getViewPath(inData.viewName);
     if (fs.existsSync(path)) {
-
-        fs.readdirSync(path).forEach(file => {
-
-            fs.unlinkSync(path + "\\" + file)
-
+        fs.readdirSync(path).forEach(function (file) {
+            fs.unlinkSync(path + "\\" + file);
         });
-
         fs.rmdirSync(path);
-
     }
-
-}
-
-
-let actions = exports.actions = {
-
+};
+exports.del = del;
+exports.actions = {
     load: function (inData) {
-
-        let viewName = inData.viewName;
-
+        var viewName = inData.viewName;
         common.sendToAllClients.call(that, "loaded", {
             viewName: viewName,
-            fields: loadView(viewName)
+            fields: (0, exports.loadView)(viewName)
         });
-
     },
-
     save: function (inData) {
-
-        let viewName = inData.viewName;
-
-        let filePath = viewsCommon.getViewSettingsFilePath(viewName);
-
+        var viewName = inData.viewName;
+        var filePath = viewsCommon.getViewSettingsFilePath(viewName);
         fs.writeFileSync(filePath, JSON.stringify(inData.fields), common.fileEncoding);
-
-        actions.load(inData);
-
+        exports.actions.load(inData);
         viewer.actions.loadViewSettings({ viewName: viewName });
-
     },
-
     rename: function (inData) {
-
-        rename(inData);
-
-        viewsList.actions.getAll()
-
-        actions.load({ viewName: inData.newViewName });
-
-
+        (0, exports.rename)(inData);
+        viewsList.actions.getAll();
+        exports.actions.load({ viewName: inData.newViewName });
     },
-
-    delete: function (inData) {
-
-        del(inData);
-
-        viewsList.actions.getAll()
-
+    "delete": function (inData) {
+        (0, exports.del)(inData);
+        viewsList.actions.getAll();
     }
-
 };
-
-exports.init = function () {
-
-}
+var init = function () { };
+exports.init = init;

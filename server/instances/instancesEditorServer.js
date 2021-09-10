@@ -1,129 +1,80 @@
-let common = require('../commonServer.js');
-let templatesEditor = require('../templates/templatesEditorServer.js');
-let instancesCommon = require('../instances/instancesCommon.js');
-let playerControl = require('../player/playerControlServer.js');
-let instancesList = require('./instancesListServer.js');
-let viewer = require('../viewer/viewerServer.js');
-
-let fs = require('fs');
-let that = this;
-
+"use strict";
+exports.__esModule = true;
+exports.init = exports.actions = exports.loadInstancesWithContext = exports.loadInstance = exports.key = void 0;
+var common = require("../commonServer");
+var templatesEditor = require("../templates/templatesEditorServer");
+var instancesCommon = require("./instancesCommon");
+var playerControl = require("../player/playerControlServer");
+var instancesList = require("./instancesListServer");
+var viewer = require("../viewer/viewerServer");
+var fs = require("fs");
+var that = this;
 exports.key = "instancesEditor";
-
 function getInstanceFieldsMould(templateName) {
-
-    let template = templatesEditor.loadTemplate(templateName);
+    var template = templatesEditor.loadTemplate(templateName);
     return (template.settings || {}).instanceFieldsMould;
-
 }
-
-let loadInstance = exports.loadInstance = function (templateName, instanceName, instanceFieldsMould) {
-
-    instanceFieldsMould = instanceFieldsMould || getInstanceFieldsMould(templateName);
-
-    let filePath = instancesCommon.getInstanceSettingsFilePath(templateName, instanceName);
-
-    let raw =  fs.existsSync(filePath) ? JSON.parse(fs.readFileSync(filePath, common.fileEncoding)) : {};
-
+var loadInstance = function (templateName, instanceName, instanceFieldsMould) {
+    instanceFieldsMould =
+        instanceFieldsMould || getInstanceFieldsMould(templateName);
+    var filePath = instancesCommon.getInstanceSettingsFilePath(templateName, instanceName);
+    var raw = fs.existsSync(filePath)
+        ? JSON.parse(fs.readFileSync(filePath, common.fileEncoding))
+        : {};
     return common.applyFieldDefaults(raw, instanceFieldsMould);
-}
-
-
-let loadInstancesWithContext = exports.loadInstancesWithContext = function (templateName, instanceNames) {
-
-    let instanceFieldsMould = getInstanceFieldsMould(templateName);
-
-    let result = instanceNames.map(function (instanceName) {
-
+};
+exports.loadInstance = loadInstance;
+var loadInstancesWithContext = function (templateName, instanceNames) {
+    var instanceFieldsMould = getInstanceFieldsMould(templateName);
+    var result = instanceNames.map(function (instanceName) {
         return {
             instanceName: instanceName,
-            fields: loadInstance(templateName, instanceName, instanceFieldsMould)
+            fields: (0, exports.loadInstance)(templateName, instanceName, instanceFieldsMould)
         };
-
     });
-
     return {
         templateName: templateName,
         instances: result
     };
-
-}
-
-let actions = exports.actions = {
-
+};
+exports.loadInstancesWithContext = loadInstancesWithContext;
+exports.actions = {
     load: function (inData) {
-
-        let templateName = inData.templateName,
-            instanceNames = inData.instanceNames;
-
+        var templateName = inData.templateName, instanceNames = inData.instanceNames;
         if (!instanceNames) {
             instanceNames = instancesList.getAll(templateName);
         }
-
-        common.sendToAllClients.call(that, "loaded", loadInstancesWithContext(templateName, instanceNames));
-
+        common.sendToAllClients.call(that, "loaded", (0, exports.loadInstancesWithContext)(templateName, instanceNames));
     },
-
     save: function (inData) {
-
-        let templateName = inData.templateName,
-            instances = inData.instances;
-
+        var templateName = inData.templateName, instances = inData.instances;
         instances.forEach(function (instance) {
-
-            let filePath = instancesCommon.getInstanceSettingsFilePath(templateName, instance.instanceName);
-
+            var filePath = instancesCommon.getInstanceSettingsFilePath(templateName, instance.instanceName);
             fs.writeFileSync(filePath, JSON.stringify(instance.fields), common.fileEncoding);
-
         });
-
-        actions.load(inData);
+        exports.actions.load(inData);
         playerControl.actions.loadAll();
-
     },
-
     add: function (inData) {
-
         instancesList.add(inData);
-
         delete inData.instanceName;
-
-        actions.load(inData)
-
+        exports.actions.load(inData);
     },
-
     rename: function (inData) {
-
         instancesList.rename(inData);
-
-        actions.load(inData)
-
+        exports.actions.load(inData);
     },
-
-    delete: function (inData) {
-
-        instancesList.delete(inData);
-
+    "delete": function (inData) {
+        instancesList.del(inData);
         delete inData.instanceName;
-
-        actions.load(inData)
-
+        exports.actions.load(inData);
     },
-
     startIn: function (inData) {
-
         viewer.startIn(inData);
-        
     },
-
     startOut: function (inData) {
-
         viewer.startOut(inData);
-        
     }
-
 };
-
-exports.init = function () {
-
-}
+var init = function () { };
+exports.init = init;

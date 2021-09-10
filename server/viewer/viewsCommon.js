@@ -1,19 +1,17 @@
-let common = require('../commonServer.js');
-
-let fs = require('fs');
-
-let rootPath = '../public/data/views';
-
-const viewSettingsFileName = "view.json";
-
-let getViewsFolderPath = exports.getViewsFolderPath = function() {
+"use strict";
+exports.__esModule = true;
+exports.getViewSettingsFilePath = exports.getViewPath = exports.getViewsFolderPath = void 0;
+var rootPath = "../public/data/views";
+var viewSettingsFileName = "view.json";
+var getViewsFolderPath = function () {
     return rootPath;
-}
-
-let getViewPath = exports.getViewPath = function getViewPath(viewName) {
-    return getViewsFolderPath() + "/" + viewName;
 };
-
-exports.getViewSettingsFilePath = function (viewName) {
-    return getViewPath(viewName) + "/" + viewSettingsFileName;
-}
+exports.getViewsFolderPath = getViewsFolderPath;
+var getViewPath = function getViewPath(viewName) {
+    return (0, exports.getViewsFolderPath)() + "/" + viewName;
+};
+exports.getViewPath = getViewPath;
+var getViewSettingsFilePath = function (viewName) {
+    return (0, exports.getViewPath)(viewName) + "/" + viewSettingsFileName;
+};
+exports.getViewSettingsFilePath = getViewSettingsFilePath;

@@ -1,68 +1,44 @@
-let common = require('../commonServer.js');
-let templatesCommon = require('./templatesCommon.js');
-let templatesEditor = require('./templatesEditorServer.js');
-
-let fs = require('fs');
-let that = this;
-
+"use strict";
+exports.__esModule = true;
+exports.init = exports.actions = exports.getAllActive = exports.getAll = exports.key = void 0;
+var common = require("../commonServer");
+var templatesCommon = require("./templatesCommon");
+var templatesEditor = require("./templatesEditorServer");
+var fs = require("fs");
+var that = this;
 exports.key = "templatesList";
-
-let getAll = exports.getAll = function () {
-
+var getAll = function () {
     return fs.readdirSync(templatesCommon.getTemplatesFolderPath());
-
 };
-
-let getAllActive = exports.getAllActive = function () {
-
-    return getAll().filter(function(templateName) {
-
-        let settings = templatesEditor.loadTemplate(templateName, templatesCommon.filesForTemplate.settings);
-
-        return settings.templateSettings.some(f => f.name == 'active' && f.value);
-
-    })
-
+exports.getAll = getAll;
+var getAllActive = function () {
+    return (0, exports.getAll)().filter(function (templateName) {
+        var settings = templatesEditor.loadTemplate(templateName, templatesCommon.filesForTemplate.settings);
+        return settings.templateSettings.some(function (f) { return f.name == "active" && f.value; });
+    });
 };
-
-let actions = exports.actions = {
-
+exports.getAllActive = getAllActive;
+exports.actions = {
     getAll: function () {
-
-        common.sendToAllClients.call(that, "all", getAll());
-
+        common.sendToAllClients.call(that, "all", (0, exports.getAll)());
     },
-
     getAllActive: function () {
-
-        common.sendToAllClients.call(that, "all", getAllActive());
-
+        common.sendToAllClients.call(that, "all", (0, exports.getAllActive)());
     },
-
     add: function (inData) {
-
-        let templateName = inData.templateName;
-
+        var templateName = inData.templateName;
         if (!templateName) {
             common.sendToAllClients.call(that, "warning", "Must have name");
             return;
         }
-
-        let path = templatesCommon.getTemplatePath(templateName);
-
+        var path = templatesCommon.getTemplatePath(templateName);
         if (fs.existsSync(path)) {
             common.sendToAllClients.call(that, "warning", "Already exists");
             return;
         }
-
         fs.mkdirSync(path);
-
-        actions.getAll()
-
+        exports.actions.getAll();
     }
-
 };
-
-exports.init = function () {
-
-}
+var init = function () { };
+exports.init = init;
